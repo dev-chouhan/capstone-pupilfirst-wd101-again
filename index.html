@@ -27,13 +27,16 @@
                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Message</label>
-                    <textarea name="exampleInputPassword1" id="exampleInputPassword1" placeholder="Your Message..."
-                        required></textarea>
+                    <label for="pass" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="pass" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dob" class="form-label">D.O.B</label>
+                    <input type="date" class="form-control" id="dob" required>
                 </div>
                 <div class="mb-3 form-check">
-                    <label class="form-check-label" for="exampleCheck1">Confirm Submittion</label>
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+                    <label class="form-check-label" for="accTerms">Accept Terms and conditions</label>
+                    <input type="checkbox" class="form-check-input" id="accTerms">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -43,10 +46,11 @@
             <!-- Table will displayed in this area -->
             <table id="dataTable">
                 <tr>
-                    <th class="px-4 py-2" scope="col">#</th>
                     <th class="px-4 py-2" scope="col">Name</th>
                     <th class="px-4 py-2" scope="col">Email</th>
-                    <th class="px-4 py-2" scope="col">Message</th>
+                    <th class="px-4 py-2" scope="col">Password</th>
+                    <th class="px-4 py-2" scope="col">D.O.B</th>
+                    <th class="px-4 py-2" scope="col">Accepted terms?</th>
                 </tr>
             </table>
         </section>
