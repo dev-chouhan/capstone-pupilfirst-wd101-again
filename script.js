@@ -52,8 +52,21 @@ userForm.addEventListener("submit", (event) => {
         dob,
         accept,
     };
+    if(checkEmail()){
+        userData.push(entry);
+        console.log("Email haaaaa");
+    }
+    else{
+        console.log("Email naaaa");
+    }
 
-    userData.push(entry);
+    if(checkDate()){
+        userData.push(entry);
+        console.log("dob haaaaa");
+    } else {
+        console.log("dob naaaa");
+    }
+
 
     localStorage.setItem("user-form", JSON.stringify(userData));
     displayEntries();
@@ -65,28 +78,35 @@ window.onload = (event) => {
 
 // Validity For email
 const emailVali = elements("exampleInputEmail1");
-emailVali.addEventListener("input", (e) => {
-    if (e.value.includes("@") && e.value.includes(".")) {
-        e.style.border = "";
-        e.setCustomValidity("");
-    } else {
-        e.style.border = "1px solid red";
-        e.setCustomValidity("Email must be of form 'johndoe@email.com'");
-        e.reportValidity();
-    }
-});
+function checkEmail () {
+    emailVali.addEventListener("input", (e) => {
+        if (e.value.includes("@") && e.value.includes(".")) {
+            e.style.border = "";
+            e.setCustomValidity("");
+            return true;
+        } else {
+            e.style.border = "1px solid red";
+            e.setCustomValidity("Email must be of form 'johndoe@email.com'");
+            e.reportValidity();
+            return false;
+        }
+    });
+}
+
 
 // Validity for dob
 const dobValidity = elements("dob");
-dobValidity.addEventListener("input", (e) => {
-    let age = calculateAge(e.value);
-    if (age < 18 || age > 55) {
-        dob.setCustomValidity("You are not eligible. Ages 18 to 55 only");
-        dob.reportValidity();
-    } else {
-        dob.setCustomValidity("");
-    }
-})
+function checkDate(){
+    dobValidity.addEventListener("input", (e) => {
+        let age = calculateAge(e.value);
+        if (age < 18 || age > 55) {
+            dob.setCustomValidity("You are not eligible. Ages 18 to 55 only");
+            dob.reportValidity();
+        } else {
+            dob.setCustomValidity("");
+        }
+    })
+}
 
 function calculateAge (birthDate) {
     birthDate = new Date(birthDate);
