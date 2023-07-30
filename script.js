@@ -5,16 +5,12 @@ let elements = (id) => document.getElementById(id);
 const reteriveUserData = () => {
     let entries = localStorage.getItem("user-form");
     if (entries) {
-        entries = JSON.parse(entries);
-        console.log(entries);
+        userData = JSON.parse(entries);
     } else {
-        entries = [];
+        userData = [];
     }
-    return entries;
+    return userData;
 };
-
-let userEnteries = reteriveUserData();
-let tableEnteries = [];
 
 const displayEntries = () => {
     let entries = reteriveUserData();
@@ -31,7 +27,7 @@ const displayEntries = () => {
         const emailCell = `<td class='border px-4 py-2'>${entry.email}</td>`;
         const passCell = `<td class='border px-4 py-2'>${entry.pass}</td>`;
         const dobCell = `<td class='border px-4 py-2'>${entry.dob}</td>`;
-        const acceptCell = `<td class='border px-4 py-2'>${entry.check}</td>`;
+        const acceptCell = `<td class='border px-4 py-2'>${entry.accept}</td>`;
 
         str += `<tr>${nameCell} ${emailCell} ${passCell} ${dobCell} ${acceptCell}</tr>`;
     });
@@ -47,17 +43,14 @@ userForm.addEventListener("submit", (event) => {
     let email = elements("exampleInputEmail1").value;
     let pass = elements("pass").value;
     let dob = elements("dob").value;
-    let accept = elements("accTerms").value;
-
-    let check = false;
-    if(accept.checked) check = true;
+    let accept = elements("accTerms").checked;
 
     let entry = {
         name,
         email,
         pass,
         dob,
-        check,
+        accept,
     };
 
     userData.push(entry);
@@ -66,19 +59,42 @@ userForm.addEventListener("submit", (event) => {
     displayEntries();
 });
 
-displayEntries();
+window.onload = (event) => {
+    displayEntries();
+};
 
-// Validity
-
+// Validity For email
 const emailVali = elements("exampleInputEmail1");
-emailVali.addEventListener("input", () => Validate(email));
-function Validate(elem) {
-    if (elem.Validity.typeMismatch) {
-        elem.style.border = "1px solid red";
-        elem.setCustomValidity("Email must be of form 'johndoe@email.com'");
-        elem.reportValidity();
+emailVali.addEventListener("input", (e) => {
+    if (e.value.includes("@") && e.value.includes(".")) {
+        e.style.border = "";
+        e.setCustomValidity("");
     } else {
-        elem.style.border = "";
-        elem.setCustomValidity("");
+        e.style.border = "1px solid red";
+        e.setCustomValidity("Email must be of form 'johndoe@email.com'");
+        e.reportValidity();
     }
+});
+
+// Validity for dob
+const dobValidity = elements("dob");
+dobValidity.addEventListener("input", (e) => {
+    let age = calculateAge(e.value);
+    if (age < 18 || age > 55) {
+        dob.setCustomValidity("You are not eligible. Ages 18 to 55 only");
+        dob.reportValidity();
+    } else {
+        dob.setCustomValidity("");
+    }
+})
+
+function calculateAge (birthDate) {
+    birthDate = new Date(birthDate);
+    let otherDate = new Date();
+    var years = (otherDate.getFullYear() - birthDate.getFullYear());
+    if (otherDate.getMonth() < birthDate.getMonth() || 
+        otherDate.getMonth() == birthDate.getMonth() && otherDate.getDate() < birthDate.getDate()) {
+        years--;
+    }
+    return years;
 }
