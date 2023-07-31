@@ -52,22 +52,10 @@ userForm.addEventListener("submit", (event) => {
         dob,
         accept,
     };
-    if(checkEmail()){
+
+    if(checkEmailAndDob()){
         userData.push(entry);
-        console.log("Email haaaaa");
     }
-    else{
-        console.log("Email naaaa");
-    }
-
-    if(checkDate()){
-        userData.push(entry);
-        console.log("dob haaaaa");
-    } else {
-        console.log("dob naaaa");
-    }
-
-
     localStorage.setItem("user-form", JSON.stringify(userData));
     displayEntries();
 });
@@ -76,45 +64,38 @@ window.onload = (event) => {
     displayEntries();
 };
 
-// Validity For email
+// Validity Checking
 const emailVali = elements("exampleInputEmail1");
-function checkEmail () {
-    emailVali.addEventListener("input", (e) => {
-        if (e.value.includes("@") && e.value.includes(".")) {
-            e.style.border = "";
-            e.setCustomValidity("");
-            return true;
-        } else {
-            e.style.border = "1px solid red";
-            e.setCustomValidity("Email must be of form 'johndoe@email.com'");
-            e.reportValidity();
-            return false;
-        }
-    });
-}
-
-
-// Validity for dob
 const dobValidity = elements("dob");
-function checkDate(){
-    dobValidity.addEventListener("input", (e) => {
-        let age = calculateAge(e.value);
-        if (age < 18 || age > 55) {
-            dob.setCustomValidity("You are not eligible. Ages 18 to 55 only");
-            dob.reportValidity();
-        } else {
-            dob.setCustomValidity("");
-        }
-    })
+
+function checkEmailAndDob () {
+    let opt = true;
+    // For email
+    if (emailVali.value.includes("@") && emailVali.value.includes(".")) {
+        emailVali.style.border = "";
+        emailVali.setCustomValidity("");
+        opt = true;
+    } else {
+        emailVali.style.border = "1px solid red";
+        emailVali.setCustomValidity("Email must be of form 'johndoe@email.com'");
+        emailVali.reportValidity();
+        opt = false;
+    }
+    // For age
+    let age = calculateAge(dobValidity.value);
+    if (age < 18 || age > 55) {
+        dobValidity.setCustomValidity("You are not eligible. Ages 18 to 55 only");
+        dobValidity.reportValidity();
+        opt = false;
+    } else {
+        dobValidity.setCustomValidity("");
+        opt = true;
+    }
+    return opt;
 }
 
-function calculateAge (birthDate) {
-    birthDate = new Date(birthDate);
-    let otherDate = new Date();
-    var years = (otherDate.getFullYear() - birthDate.getFullYear());
-    if (otherDate.getMonth() < birthDate.getMonth() || 
-        otherDate.getMonth() == birthDate.getMonth() && otherDate.getDate() < birthDate.getDate()) {
-        years--;
-    }
-    return years;
+function calculateAge (birthday){
+    const ageDifMs = Date.now() - new Date(birthday).getTime();
+    const ageDate = new Date(ageDifMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
