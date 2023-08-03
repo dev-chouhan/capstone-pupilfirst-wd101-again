@@ -1,11 +1,13 @@
 // Validate Email
 const email = document.getElementById("email");
 email.addEventListener("input", function (event) {
-    if (email.validity.typeMismatch) {
+    if (email.value.includes("@")&&email.value.includes(".")) {
+        email.style.border = "";
+        email.setCustomValidity("");
+    } else {
+        email.style.border = "3px solid red";
         email.setCustomValidity("This is not a valid email address!");
         email.reportValidity();
-    } else {
-        email.setCustomValidity("");
     }
 });
 
