@@ -14,14 +14,6 @@ email.addEventListener("input", function (event) {
 // Validate DOB
 const dob = document.getElementById("dob");
 
-const debounce = (callback, time) => {
-    let debounceTimer;
-    return (e) => {
-        window.clearTimeout(debounceTimer);
-        debounceTimer = window.setTimeout(callback.bind(null, e), time);
-    };
-};
-
 const validateAge = (e) => {
     const now = new Date(e.target.value);
     let age=Number(new Date().getFullYear())-Number(now.getFullYear());
@@ -34,7 +26,7 @@ const validateAge = (e) => {
     }
 };
 
-dob.addEventListener("input", debounce(validateAge, 700));
+dob.addEventListener("input", validateAge);
 
 // Save and Display Entries
 let userEntries = localStorage.getItem("user-entries");
